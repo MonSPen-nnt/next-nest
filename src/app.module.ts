@@ -5,6 +5,14 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './modules/users/users.module';
 import { User } from './modules/users/entities/user.entity';
+import { Board } from './modules/board/entities/board.entity';
+import { BoardMember } from './modules/board_member/entities/board_member.entity';
+import { CardLabel } from './modules/card_labels/entities/card_label.entity';
+import { CardMember } from './modules/card_members/entities/card_member.entity';
+import { Card } from './modules/cards/entities/card.entity';
+import { Comment } from './modules/comments/entities/comment.entity';
+import { Label } from './modules/labels/entities/label.entity';
+import { List } from './modules/lists/entities/list.entity';
 import { DataSource } from 'typeorm';
 import { BoardMemberModule } from './modules/board_member/board_member.module';
 import { BoardModule } from './modules/board/board.module';
@@ -30,7 +38,18 @@ import { ListsModule } from './modules/lists/lists.module';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_DATABASE'),
-        entities: [User],
+        entities: [
+          User,
+          Board,
+          BoardMember,
+          List,
+          Card,
+          Comment,
+          Label,
+          CardLabel,
+          CardMember,
+        ],
+
         synchronize: true,
       }),
     }),
