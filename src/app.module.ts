@@ -1,10 +1,53 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { UsersModule } from './modules/users/users.module';
+import { User } from './modules/users/entities/user.entity';
+import { DataSource } from 'typeorm';
+import { BoardMemberModule } from './modules/board_member/board_member.module';
+import { BoardModule } from './modules/board/board.module';
+import { CardLabelsModule } from './modules/card_labels/card_labels.module';
+import { CardMembersModule } from './modules/card_members/card_members.module';
+import { CardModule } from './modules/cards/card.module';
+import { CommentsModule } from './modules/comments/comments.module';
+import { LabelsModule } from './modules/labels/labels.module';
+import { ListsModule } from './modules/lists/lists.module';
 
 @Module({
-  imports: [],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        host: configService.get('DB_HOST'),
+        port: +configService.get('DB_PORT'),
+        username: configService.get('DB_USERNAME'),
+        password: configService.get('DB_PASSWORD'),
+        database: configService.get('DB_DATABASE'),
+        entities: [User],
+        synchronize: true,
+      }),
+    }),
+
+    UsersModule,
+    BoardMemberModule,
+    BoardModule,
+    CardLabelsModule,
+    CardMembersModule,
+    CardModule,
+    CommentsModule,
+    LabelsModule,
+    ListsModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(private dataSource: DataSource) {}
+}
