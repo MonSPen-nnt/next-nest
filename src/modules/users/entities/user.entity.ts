@@ -1,6 +1,7 @@
 import {
   Column,
   CreateDateColumn,
+  UpdateDateColumn,
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -33,11 +34,14 @@ export class User {
   @Column({ default: 'LOCAL' })
   account_type: string;
 
-  @Column({ default: true })
+  @Column({ default: false })
   is_active: boolean;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ name: 'created_at' })
   created_at: Date;
+
+  @UpdateDateColumn({ name: 'updated_at' })
+  update_at: Date;
 
   @OneToMany(() => Board, (board) => board.owner)
   boards: Board[];
