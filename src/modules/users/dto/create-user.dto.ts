@@ -27,6 +27,7 @@ export class CreateUserDto {
   @IsString()
   image?: string;
 
+  //////////
   @IsOptional()
   @IsString()
   role?: string; // default: 'member'

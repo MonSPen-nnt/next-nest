@@ -22,6 +22,7 @@ import { CardModule } from './modules/cards/card.module';
 import { CommentsModule } from './modules/comments/comments.module';
 import { LabelsModule } from './modules/labels/labels.module';
 import { ListsModule } from './modules/lists/lists.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -65,6 +66,7 @@ import { ListsModule } from './modules/lists/lists.module';
     CommentsModule,
     LabelsModule,
     ListsModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

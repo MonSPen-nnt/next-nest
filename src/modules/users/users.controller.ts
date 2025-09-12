@@ -29,12 +29,16 @@ export class UsersController {
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(+id);
   }
-
+  //User updating
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(+id, updateUserDto);
   }
-
+  //Admin change user status
+  @Patch(':id')
+  adminUpdate(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    return this.usersService.adminUpdate(+id, updateUserDto);
+  }
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.usersService.remove(+id);
