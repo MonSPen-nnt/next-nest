@@ -12,6 +12,9 @@ import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { hashPasswordHelper } from 'src/helpers/ultis';
 import { AdminUpdateUserDto } from './dto/admin-update-user.dto';
+import { CreateAuthDto } from 'src/auth/dto/create-auth.dto';
+import { v4 as uuidv4 } from 'uuid';
+import dayjs from 'dayjs';
 @Injectable()
 export class UsersService {
   constructor(
@@ -87,5 +90,28 @@ export class UsersService {
       message: `User with ID ${id} has been removed successfully`,
       deleteUser: user,
     };
+  }
+  async handleRegister(registerDto: CreateAuthDto) {
+    const { name, email, password } = registerDto;
+    //check email
+    const isExist = await this.isEmailExist(email);
+    if (isExist) throw new BadRequestException('Email exist');
+    //hash password
+    const hashPassword = await hashPasswordHelper(password);
+    const user = await this.usersRepository.create({
+      name,
+      email,
+      password: hashPassword,
+      verification_code: uuidv4(),
+      verification_expires_at: dayjs().add(30, 'minutes').toDate(),
+      is_active: false,
+    });
+
+    await this.usersRepository.save(user); // ⬅️ lưu xuống DB
+    //trả ra phản hồi
+    return {
+      id: user.id,
+    };
+    //send email
   }
 }

@@ -37,6 +37,13 @@ export class User {
   @Column({ default: false })
   is_active: boolean;
 
+  // 👉 Thêm 2 cột xác nhận tài khoản
+  @Column({ nullable: true })
+  verification_code: string;
+
+  @Column({ type: 'timestamptz', nullable: true })
+  verification_expires_at: Date;
+
   @CreateDateColumn({ name: 'created_at' })
   created_at: Date;
 
