@@ -15,12 +15,14 @@ import { AdminUpdateUserDto } from './dto/admin-update-user.dto';
 import { CreateAuthDto } from 'src/auth/dto/create-auth.dto';
 import { v4 as uuidv4 } from 'uuid';
 import dayjs from 'dayjs';
+import { MailerService } from '@nestjs-modules/mailer';
 @Injectable()
 export class UsersService {
   constructor(
     //tương đương với constructor ở MongoDB
     @InjectRepository(User)
     private usersRepository: Repository<User>,
+    private readonly mailerService: MailerService,
   ) {}
 
   isEmailExist = async (email: string) => {
@@ -98,20 +100,36 @@ export class UsersService {
     if (isExist) throw new BadRequestException('Email exist');
     //hash password
     const hashPassword = await hashPasswordHelper(password);
+    const codeId = uuidv4();
     const user = await this.usersRepository.create({
       name,
       email,
       password: hashPassword,
-      verification_code: uuidv4(),
+      verification_code: codeId,
       verification_expires_at: dayjs().add(30, 'minutes').toDate(),
       is_active: false,
     });
-
     await this.usersRepository.save(user); // ⬅️ lưu xuống DB
+
+    //send email
+    this.mailerService
+      .sendMail({
+        to: user.email,
+        subject: 'Activate your account',
+        template: 'register',
+        context: {
+          name: user?.name ?? user.email,
+          activationCode: codeId,
+        },
+      })
+      .then(() => {})
+      .catch((err) => {
+        console.error('Email sending failed:', err);
+      });
+
     //trả ra phản hồi
     return {
       id: user.id,
     };
-    //send email
   }
 }
