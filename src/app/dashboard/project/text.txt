@@ -1,0 +1,5 @@
+Tạo dự án (project) → gán cho team nào
+
+Quản lý thông tin dự án (tên, deadline, mô tả, trạng thái: active/archived)
+
+Theo dõi tiến độ tổng quan (ví dụ % task hoàn thành)

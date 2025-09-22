@@ -1,0 +1,5 @@
+Tạo / chỉnh sửa / xóa team
+
+Gán leader cho team
+
+Thêm / xóa thành viên trong team

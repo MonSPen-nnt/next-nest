@@ -1,0 +1,11 @@
+Thêm / sửa / xóa user
+
+Quản lý thông tin user (tên, email, trạng thái active/inactive)
+
+Quản lý role:
+
+Admin
+
+Leader
+
+Member
